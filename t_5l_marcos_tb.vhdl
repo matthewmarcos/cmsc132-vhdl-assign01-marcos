@@ -2,17 +2,17 @@
 library IEEE; use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity tb_myAlarm is
+entity t_5l_marcos_tb is
     -- constants
     constant DELAY: time := 10 ns;
-end entity tb_myAlarm;
+end entity t_5l_marcos_tb;
 
-architecture tb of tb_myAlarm is
+architecture tb of t_5l_marcos_tb is
     signal inA, inB, inC: std_logic;
     signal outA, outB, outC: std_logic;
     signal alarm: std_logic;
 
-    component myAlarm is
+    component t_5l_marcos is
         -- ports
         port(
             alarm: out std_logic;
@@ -23,10 +23,10 @@ architecture tb of tb_myAlarm is
             outB: in std_logic;
             outC: in std_logic
         );
-    end component myAlarm;
+    end component t_5l_marcos;
 
 begin
-    UUT: component myAlarm port map(
+    UUT: component t_5l_marcos port map(
         alarm, inA, inB, inC, outA, outB, outC
     );
 
