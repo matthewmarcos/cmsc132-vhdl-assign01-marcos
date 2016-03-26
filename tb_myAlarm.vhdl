@@ -2,17 +2,17 @@
 library IEEE; use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity tb_alarm is
+entity tb_myAlarm is
     -- constants
     constant DELAY: time := 10 ns;
-end entity tb_alarm;
+end entity tb_myAlarm;
 
-architecture tb of tb_alarm is
+architecture tb of tb_myAlarm is
     signal inA, inB, inC: std_logic;
     signal outA, outB, outC: std_logic;
     signal alarm: std_logic;
 
-    component alarm is
+    component myAlarm is
         -- ports
         port(
             alarm: out std_logic;
@@ -23,10 +23,10 @@ architecture tb of tb_alarm is
             outB: in std_logic;
             outC: in std_logic
         );
-    end component alarm;
+    end component myAlarm;
 
 begin
-    UUT: component alarm port map(
+    UUT: component myAlarm port map(
         alarm, inA, inB, inC, outA, outB, outC
     );
 
@@ -61,7 +61,7 @@ begin
                 report "ERROR: Expected alarm " & std_logic'image(expected_alarm) & " and alarm " & std_logic'image(alarm);
 
             -- increment error_count on error
-            if((expected_alarm /= alarm) then
+            if(expected_alarm /= alarm) then
                 error_count := error_count + 1;
             end if;
         end loop;

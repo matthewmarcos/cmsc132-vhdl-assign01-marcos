@@ -2,7 +2,7 @@
 
 library IEEE; use IEEE.std_logic_1164.all;
 
-entity alarm is
+entity myAlarm is
     -- declare ports
     port(
         alarm: out std_logic;
@@ -15,12 +15,12 @@ entity alarm is
         outB: in std_logic;
         outC: in std_logic
     );
-end entity alarm;
+end entity myAlarm;
 
-architecture alarm of alarm is
+architecture myAlarm of myAlarm is
 begin
-    process () is
+    process (inA, inB, inC, outA, outB, outC) is
     begin
         alarm <= (inA or inB or inC) and (outA or outB or outC);
     end process;
-end architecture alarm;
+end architecture myAlarm;
