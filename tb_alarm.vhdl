@@ -49,30 +49,19 @@ begin
             outB <= std_logic(temp(1));
             outC <= std_logic(temp(0));
 
-            -- for case 0
-            if(count = 0) then
-                expected_alarm := '0'
-            else
-                -- set expected encoded base on value of count
-                if(count = 1) then expected_alarm := '1';
-                elsif(count < 4) then expected_alarm := '1';
-                elsif(count < 8) then expected_alarm := '1';
-                elsif(count < 16) then expected_alarm := '1';
-                elsif(count < 32) then expected_alarm := '1';
-                elsif(count < 64) then expected_alarm := '1';
-                elsif(count < 128) then expected_alarm := '1';
-                else expected_encoded := '0';
-                end if;
+            -- See TEST\ CASES.txt
+            if((count < 9) or (count mod 8 = 0)) then expected_alarm := '0';
+            else expected_alarm := '1';
             end if;
 
             wait for DELAY;
 
             -- assert the test case
-            assert((expected_valid = valid) and (expected_encoded = encoded))
-                report "ERROR: Expected valid " & std_logic'image(expected_valid) & " and encoded " & std_logic'image(expected_encoded(1)) & std_logic'image(expected_encoded(0)) & " at time " & time'image(now);
+            assert(expected_alarm = alarm)
+                report "ERROR: Expected alarm " & std_logic'image(expected_alarm) & " and alarm " & std_logic'image(alarm);
 
             -- increment error_count on error
-            if((expected_valid /= valid) or (expected_encoded /= encoded)) then
+            if((expected_alarm /= alarm) then
                 error_count := error_count + 1;
             end if;
         end loop;
