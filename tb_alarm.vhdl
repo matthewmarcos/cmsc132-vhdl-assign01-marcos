@@ -1,3 +1,4 @@
+-- Created by Joseph Matthew R. Marcos
 library IEEE; use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
@@ -7,31 +8,39 @@ entity tb_alarm is
 end entity tb_alarm;
 
 architecture tb of tb_alarm is
-    signal valid: std_logic;
-    signal encoded: std_logic_vector(2 downto 0);
-    signal input: std_logic_vector(7 downto 0);
+    signal inA, inB, inC: std_logic;
+    signal outA, outB, outC: std_logic;
+    signal alarm: std_logic;
 
     component alarm is
         -- ports
-        port(valid: out std_logic;
-        encoded: out std_logic_vector(2 downto 0);
-        input: in std_logic_vector(7 downto 0));
+        port(
+            alarm: out std_logic;
+            inA: in std_logic;
+            inB: in std_logic;
+            inC: in std_logic;
+            outA: in std_logic;
+            outB: in std_logic;
+            outC: in std_logic
+        );
     end component alarm;
 
 begin
-    UUT: component alarm port map(valid, encoded, input);
+    UUT: component alarm port map(
+        alarm, inA, inB, inC, outA, outB, outC
+    );
 
     main: process is
-        variable temp: unsigned(7 downto 0);
-        variable expected_valid: std_logic;
-        variable expected_encoded: std_logic_vector(2 downto 0);
+        variable temp: unsigned(5 downto 0);
+        variable expected_alarm: std_logic;
         variable error_count: integer := 0;
 
     begin
         report "Start simulation.";
 
         for count in 0 to 63 loop
-            temp := TO_UNSIGNED(count, 8);
+
+            temp := TO_UNSIGNED(count, 6);
             -- set input values from temp
             inA  <= std_logic(temp(5));
             inB  <= std_logic(temp(4));
@@ -42,19 +51,17 @@ begin
 
             -- for case 0
             if(count = 0) then
-                expected_valid := '0';
-                expected_encoded := "000";
+                expected_alarm := '0'
             else
-                expected_valid := '1';
                 -- set expected encoded base on value of count
-                if(count = 1) then expected_encoded := "000";
-                elsif(count < 4) then expected_encoded := "001";
-                elsif(count < 8) then expected_encoded := "010";
-                elsif(count < 16) then expected_encoded := "011";
-                elsif(count < 32) then expected_encoded := "100";
-                elsif(count < 64) then expected_encoded := "101";
-                elsif(count < 128) then expected_encoded := "110";
-                else expected_encoded := "111";
+                if(count = 1) then expected_alarm := '1';
+                elsif(count < 4) then expected_alarm := '1';
+                elsif(count < 8) then expected_alarm := '1';
+                elsif(count < 16) then expected_alarm := '1';
+                elsif(count < 32) then expected_alarm := '1';
+                elsif(count < 64) then expected_alarm := '1';
+                elsif(count < 128) then expected_alarm := '1';
+                else expected_encoded := '0';
                 end if;
             end if;
 
